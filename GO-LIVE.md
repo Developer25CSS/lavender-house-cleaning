@@ -1,4 +1,4 @@
-# Go Live — lavendercleaningco.com
+# Go Live — lavendercleanco.com
 
 Four steps, about 30 minutes of your time plus waiting for DNS.
 
@@ -39,7 +39,7 @@ Go to **[cloudflare.com/products/registrar](https://www.cloudflare.com/products/
 or **[porkbun.com](https://porkbun.com)** and register:
 
 ```
-lavendercleaningco.com
+lavendercleanco.com
 ```
 
 Both sell at cost with free WHOIS privacy and no renewal price jump.
@@ -63,14 +63,14 @@ In your registrar's **DNS** settings, add these five records:
 > not the orange cloud. GitHub handles the certificate itself.
 
 Then back on GitHub: **Settings → Pages → Custom domain** → enter
-`lavendercleaningco.com` → **Save**.
+`lavendercleanco.com` → **Save**.
 
 Wait for the DNS check to pass — usually 10 minutes to an hour, occasionally up
 to 24. Once it does, tick **Enforce HTTPS**.
 
 ---
 
-## Then you're live at https://lavendercleaningco.com
+## Then you're live at https://lavendercleanco.com
 
 ---
 
@@ -100,7 +100,7 @@ with their exact quote — so you can still take the booking.
    `brand/social/google-business-1200x1200.png` as the logo. Add real photos of
    your work. Ask every happy client for a review.
 2. **Google Search Console** — [search.google.com/search-console](https://search.google.com/search-console).
-   Add your domain, then submit `https://lavendercleaningco.com/sitemap.xml`.
+   Add your domain, then submit `https://lavendercleanco.com/sitemap.xml`.
 3. **Bing Webmaster Tools** — same idea, five minutes, some customers use it.
 
 Your site already includes structured data telling Google you're a house
