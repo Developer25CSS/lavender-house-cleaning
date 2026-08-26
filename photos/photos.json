@@ -1,0 +1,88 @@
+{
+  "hero": {
+    "file": "hero.jpg",
+    "alt": "Beautifully cleaned high-end living room with panoramic views"
+  },
+  "beforeAfter": [
+    {
+      "before": "bathroom-vanity-before.jpg",
+      "after": "bathroom-vanity-after.jpg",
+      "title": "Bathroom Vanity",
+      "caption": "Basin descaled, mirror polished, surround wiped down"
+    },
+    {
+      "composite": "living-room-pair.jpg",
+      "title": "Living Room",
+      "caption": "Toys and clutter cleared, floors vacuumed and mopped"
+    }
+  ],
+  "details": [
+    {
+      "file": "detail-oven-and-range-vents.jpg",
+      "title": "Oven & Range Vents",
+      "caption": "Baked-on grease and dust others leave behind"
+    },
+    {
+      "file": "detail-fixtures-and-faucets.jpg",
+      "title": "Fixtures & Faucets",
+      "caption": "Hard-water scale scrubbed off, not wiped around"
+    },
+    {
+      "file": "detail-window-tracks-and-sills.jpg",
+      "title": "Window Tracks & Sills",
+      "caption": "Mildew and grit lifted out of the channels"
+    }
+  ],
+  "gallery": [
+    {
+      "file": "kitchens.jpg",
+      "title": "Kitchens",
+      "caption": "Degreased, polished, floors mopped"
+    },
+    {
+      "file": "islands-and-counters.jpg",
+      "title": "Islands & Counters",
+      "caption": "Stone sealed clean and streak-free"
+    },
+    {
+      "file": "luxury-kitchens.jpg",
+      "title": "Luxury Kitchens",
+      "caption": "Fine finishes treated with care"
+    },
+    {
+      "file": "master-baths.jpg",
+      "title": "Master Baths",
+      "caption": "Tubs, glass and tile detailed"
+    },
+    {
+      "file": "showers.jpg",
+      "title": "Showers",
+      "caption": "Doors descaled, grout scrubbed"
+    },
+    {
+      "file": "bathrooms.jpg",
+      "title": "Bathrooms",
+      "caption": "Disinfected top to bottom"
+    },
+    {
+      "file": "living-rooms.jpg",
+      "title": "Living Rooms",
+      "caption": "Floors mopped, surfaces dusted"
+    },
+    {
+      "file": "nurseries-and-kids-rooms.jpg",
+      "title": "Nurseries & Kids' Rooms",
+      "caption": "Safe products, spotless finish"
+    },
+    {
+      "file": "inside-refrigerators.jpg",
+      "title": "Inside Refrigerators",
+      "caption": "Shelves pulled and washed"
+    },
+    {
+      "file": "fridge-detail.jpg",
+      "title": "Fridge Detail",
+      "caption": "Every drawer, every seal"
+    }
+  ]
+}
