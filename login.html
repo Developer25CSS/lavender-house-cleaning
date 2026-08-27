@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login | Lavender House Cleaning</title>
+<meta name="description" content="Log in to your Lavender House Cleaning account to view your booking history.">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#995ec9">
+<link rel="canonical" href="https://lavendercleanco.com/login.html">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.className+=" js";</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="nav-backdrop" hidden></div>
+
+<div class="topbar">
+  <div class="wrap">
+    <div>🪻 Fast same-day service available &mdash; 7 days a week</div>
+    <div class="tb-right">
+      <a href="tel:14425880028">📱 442.588.0028</a>
+      <a href="payment.html">💳 Pay Online</a>
+    </div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap nav-row">
+    <a class="brand" href="index.html">
+      <span>Lavender<small>House Cleaning</small></span>
+    </a>
+    <nav class="main-nav" id="mainNav" aria-label="Main">
+      <button class="drawer-close" aria-label="Close menu">✕</button>
+      <a href="index.html">Home</a>
+      <a href="services.html">Services &amp; Pricing</a>
+      <a href="service-areas.html">Service Areas</a>
+      <a href="booking.html">Book Now</a>
+      <a href="payment.html">Pay Online</a>
+      <a href="login.html" class="active">Login</a>
+      <a href="hiring.html" class="hire">We're Hiring</a>
+      <div class="drawer-cta">
+        <a class="d-call" href="tel:14425880028">📱 Call 442.588.0028</a>
+        <a class="d-text" href="sms:14425880028">💬 Text Us</a>
+        <a class="d-pay" href="payment.html">💳 Book &amp; Pay</a>
+      </div>
+    </nav>
+    <div class="nav-actions">
+      <a class="nav-btn pay" href="payment.html">Book &amp; Pay</a>
+      <a class="nav-btn call" href="tel:14425880028">Call Now</a>
+      <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">☰</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section style="padding:64px 0;">
+  <div class="wrap center" style="max-width:440px;">
+    <span class="eyebrow">Welcome Back</span>
+    <h1>Log In</h1>
+    <p class="lede">See your booking history and manage upcoming cleanings.</p>
+
+    <form class="form-card" id="loginForm" style="text-align:left;margin-top:24px;">
+      <p class="note" id="formError" style="display:none;color:#b3261e;"></p>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="center" style="margin-top:24px;">
+        <button class="btn btn-primary btn-lg" type="submit">Log In</button>
+        <p class="note">Don't have an account? <a href="signup.html" style="color:var(--lav-700);font-weight:700;">Sign up</a></p>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-bottom">© 2026 Lavender House Cleaning &mdash; Serving Colorado Statewide</div>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+<script src="assets/api.js"></script>
+<script>
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var f = e.target, errEl = document.getElementById('formError');
+  errEl.style.display = 'none';
+  apiFetch('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email: f.email.value, password: f.password.value })
+  }).then(function (user) {
+    window.location.href = (user.role === 'STAFF' || user.role === 'ADMIN') ? 'staff/dashboard.html' : 'account.html';
+  }).catch(function (err) {
+    errEl.textContent = err.message;
+    errEl.style.display = 'block';
+  });
+});
+</script>
+</body>
+</html>

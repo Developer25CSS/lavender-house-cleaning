@@ -444,6 +444,7 @@
       <a href="service-areas.html">Service Areas</a>
       <a href="booking.html" class="active">Book Now</a>
       <a href="payment.html">Pay Online</a>
+      <a href="login.html" id="navAccountLink">Login</a>
       <a href="hiring.html" class="hire">We're Hiring</a>
           <div class="drawer-cta">
         <a class="d-call" href="tel:14425880028">📱 Call 442.588.0028</a>
@@ -858,23 +859,48 @@
 </div>
 
 <script src="site.js"></script>
+<script src="assets/api.js"></script>
 <script>
 document.getElementById('quoteForm').addEventListener('submit', function (e) {
   e.preventDefault();
   var f = e.target;
-  var subject = 'Cleaning Request - ' + f.name.value + ' (' + f.size.value + ')';
-  var body =
-    'Name: ' + f.name.value + '\n' +
-    'Phone: ' + f.phone.value + '\n' +
-    'Email: ' + f.email.value + '\n' +
-    'Home Size: ' + f.size.value + '\n' +
-    'Service: ' + f.service.value + '\n' +
-    'Area: ' + f.area.value + '\n' +
-    'Preferred Date: ' + (f.date.value || 'Flexible') + '\n' +
-    'Add-Ons: ' + (f.addons.value || 'None') + '\n' +
-    'Notes: ' + (f.notes.value || 'None');
-  window.location.href = 'mailto:info@orkdcorp.com?subject=' +
-    encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+
+  function fallbackToEmail() {
+    var subject = 'Cleaning Request - ' + f.name.value + ' (' + f.size.value + ')';
+    var body =
+      'Name: ' + f.name.value + '\n' +
+      'Phone: ' + f.phone.value + '\n' +
+      'Email: ' + f.email.value + '\n' +
+      'Home Size: ' + f.size.value + '\n' +
+      'Service: ' + f.service.value + '\n' +
+      'Area: ' + f.area.value + '\n' +
+      'Preferred Date: ' + (f.date.value || 'Flexible') + '\n' +
+      'Add-Ons: ' + (f.addons.value || 'None') + '\n' +
+      'Notes: ' + (f.notes.value || 'None');
+    window.location.href = 'mailto:info@orkdcorp.com?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+  }
+
+  if (typeof API_BASE === 'undefined' || !API_BASE) {
+    fallbackToEmail();
+    return;
+  }
+
+  apiFetch('/api/bookings', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: f.name.value,
+      phone: f.phone.value,
+      email: f.email.value,
+      homeSize: f.size.value,
+      service: f.service.value,
+      area: f.area.value,
+      addons: f.addons.value,
+      notes: (f.notes.value || '') + (f.date.value ? '\nPreferred date: ' + f.date.value : '')
+    })
+  }).then(function () {
+    window.location.href = 'account.html';
+  }).catch(fallbackToEmail);
 });
 </script>
 </body>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staff Dashboard | Lavender House Cleaning</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="stylesheet" href="../style.css">
+<script>document.documentElement.className+=" js";</script>
+<style>
+  .dash-wrap { max-width:1100px; }
+  .booking-table { width:100%; border-collapse:collapse; margin-top:24px; font-size:.9rem; }
+  .booking-table th, .booking-table td { text-align:left; padding:12px 14px; border-bottom:1px solid var(--border, #e5dcf0); vertical-align:top; }
+  .booking-table select { font-size:.85rem; padding:4px 8px; border-radius:6px; border:1px solid var(--border, #cbb8e0); }
+  .status-pill { display:inline-block; padding:3px 10px; border-radius:999px; font-size:.75rem; font-weight:700; text-transform:uppercase; }
+  .status-PENDING { background:#fdf1d6; color:#8a6415; }
+  .status-CONFIRMED { background:#dcecff; color:#1c4e94; }
+  .status-COMPLETED { background:#dff5e3; color:#1e6b39; }
+  .status-CANCELLED { background:#fbdede; color:#9c2626; }
+</style>
+</head>
+<body>
+<main id="main">
+<section style="padding:48px 0;">
+  <div class="wrap dash-wrap">
+    <div id="loggedOut" style="display:none;text-align:center;padding:64px 0;">
+      <h1>Staff access required</h1>
+      <p class="lede">Please log in with a staff or admin account.</p>
+      <a class="btn btn-primary" href="login.html" style="margin-top:16px;display:inline-block;">Go to Staff Login</a>
+    </div>
+
+    <div id="loggedIn" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <span class="eyebrow">Staff Dashboard</span>
+          <h1 id="welcomeHeading" style="margin:0;">Bookings</h1>
+        </div>
+        <button class="btn btn-ghost" id="logoutBtn">Log Out</button>
+      </div>
+
+      <p class="note" id="emptyState" style="display:none;">No bookings yet.</p>
+      <div style="overflow-x:auto;">
+        <table class="booking-table" id="bookingsTable" style="display:none;">
+          <thead>
+            <tr>
+              <th>Requested</th><th>Customer</th><th>Contact</th><th>Service</th>
+              <th>Home Size</th><th>Area</th><th>Add-Ons</th><th>Total</th><th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="bookingsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script src="../assets/api.js"></script>
+<script>
+var STATUSES = ["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED"];
+
+function renderRow(b) {
+  var tr = document.createElement('tr');
+  var options = STATUSES.map(function (s) {
+    return '<option value="' + s + '"' + (s === b.status ? ' selected' : '') + '>' + s + '</option>';
+  }).join('');
+
+  tr.innerHTML =
+    '<td>' + new Date(b.createdAt).toLocaleDateString() + '</td>' +
+    '<td>' + b.name + '</td>' +
+    '<td>' + b.phone + '<br>' + b.email + '</td>' +
+    '<td>' + b.service + '</td>' +
+    '<td>' + b.homeSize + '</td>' +
+    '<td>' + b.area + '</td>' +
+    '<td>' + (b.addons || '—') + '</td>' +
+    '<td>' + (b.totalPrice ? '$' + b.totalPrice : '—') + '</td>' +
+    '<td><select data-id="' + b.id + '">' + options + '</select></td>';
+
+  tr.querySelector('select').addEventListener('change', function (e) {
+    apiFetch('/api/bookings/' + e.target.dataset.id, {
+      method: 'PATCH',
+      body: JSON.stringify({ status: e.target.value })
+    }).catch(function (err) {
+      alert('Could not update status: ' + err.message);
+    });
+  });
+
+  return tr;
+}
+
+apiFetch('/api/auth/me').then(function (user) {
+  if (user.role !== 'STAFF' && user.role !== 'ADMIN') throw new Error('not staff');
+  document.getElementById('loggedIn').style.display = '';
+  document.getElementById('welcomeHeading').textContent = 'Bookings — ' + user.name;
+  return apiFetch('/api/bookings');
+}).then(function (bookings) {
+  if (!bookings.length) {
+    document.getElementById('emptyState').style.display = '';
+    return;
+  }
+  document.getElementById('bookingsTable').style.display = '';
+  var body = document.getElementById('bookingsBody');
+  bookings.forEach(function (b) { body.appendChild(renderRow(b)); });
+}).catch(function () {
+  document.getElementById('loggedOut').style.display = '';
+});
+
+document.getElementById('logoutBtn') && document.getElementById('logoutBtn').addEventListener('click', function () {
+  apiFetch('/api/auth/logout', { method: 'POST' }).finally(function () {
+    window.location.href = 'login.html';
+  });
+});
+</script>
+</body>
+</html>
