@@ -347,7 +347,7 @@
         },
         "priceSpecification": {
           "@type": "PriceSpecification",
-          "minPrice": 130,
+          "minPrice": 150,
           "priceCurrency": "USD"
         }
       },
@@ -359,7 +359,7 @@
         },
         "priceSpecification": {
           "@type": "PriceSpecification",
-          "minPrice": 160,
+          "minPrice": 190,
           "priceCurrency": "USD"
         }
       },
@@ -371,7 +371,7 @@
         },
         "priceSpecification": {
           "@type": "PriceSpecification",
-          "minPrice": 230,
+          "minPrice": 275,
           "priceCurrency": "USD"
         }
       },
@@ -383,7 +383,7 @@
         },
         "priceSpecification": {
           "@type": "PriceSpecification",
-          "minPrice": 260,
+          "minPrice": 305,
           "priceCurrency": "USD"
         }
       },
@@ -395,7 +395,7 @@
         },
         "priceSpecification": {
           "@type": "PriceSpecification",
-          "minPrice": 125,
+          "minPrice": 150,
           "priceCurrency": "USD"
         }
       },
@@ -407,7 +407,7 @@
         },
         "priceSpecification": {
           "@type": "PriceSpecification",
-          "minPrice": 195,
+          "minPrice": 230,
           "priceCurrency": "USD"
         }
       }
@@ -533,7 +533,7 @@
       <div class="qb-total">
         <div style="text-align:left;">
           <div class="lbl">Your Total</div>
-          <div class="sum" id="qbSum">$130</div>
+          <div class="sum" id="qbSum">$150</div>
           <div class="breakdown" id="qbBreak">Studio / 1 Bed &middot; Basic Cleaning</div>
         </div>
         <div class="qb-actions">
@@ -542,6 +542,7 @@
         </div>
       </div>
     </div>
+    <p class="note">2-hour minimum on every booking.</p>
 
     <div class="secure-row">
       <span>&#128274; Secured by</span>
@@ -582,10 +583,10 @@
           </tr>
         </thead>
                 <tbody>
-          <tr><td>Studio / 1 Bed, 1 Bath</td><td>$130</td><td>$160</td><td>$230</td><td>$260</td></tr>
-          <tr><td>2 Bed, 1&ndash;2 Bath</td><td>$160</td><td>$195</td><td>$290</td><td>$325</td></tr>
-          <tr class="popular"><td>3 Bed, 2 Bath <span class="badge-pop">Popular</span></td><td>$195</td><td>$245</td><td>$360</td><td>$390</td></tr>
-          <tr><td>4 Bed, 2&ndash;3 Bath</td><td>$245</td><td>$290</td><td>$420</td><td>$455</td></tr>
+          <tr><td>Studio / 1 Bed, 1 Bath</td><td>$150</td><td>$190</td><td>$275</td><td>$305</td></tr>
+          <tr><td>2 Bed, 1&ndash;2 Bath</td><td>$190</td><td>$230</td><td>$340</td><td>$380</td></tr>
+          <tr class="popular"><td>3 Bed, 2 Bath <span class="badge-pop">Popular</span></td><td>$230</td><td>$285</td><td>$420</td><td>$450</td></tr>
+          <tr><td>4 Bed, 2&ndash;3 Bath</td><td>$285</td><td>$335</td><td>$485</td><td>$525</td></tr>
           <tr><td>5+ Bed / Large Home</td><td colspan="4">Custom Quote &mdash; Call or Text</td></tr>
         </tbody>
       </table>
@@ -612,7 +613,7 @@
       </details>
       <details>
         <summary>Does the deposit come off my total?</summary>
-        <div class="ans">Yes &mdash; the $50 deposit comes straight off your final bill. If your 3-bedroom detailed standard clean is $245, you'd owe $195 after the cleaning.</div>
+        <div class="ans">Yes &mdash; the $50 deposit comes straight off your final bill. If your 3-bedroom detailed standard clean is $285, you'd owe $235 after the cleaning.</div>
       </details>
       <details>
         <summary>Do you accept cash or Venmo?</summary>
@@ -714,11 +715,11 @@ var STRIPE = {
 var BIZ_SMS = "14425880028", BIZ_TEL = "14425880028", BIZ_EMAIL = "info@orkdcorp.com";
 
 var PRICES = {
-  basic:    [130, 160, 195, 245],
-  standard: [160, 195, 245, 290],
-  deep:     [230, 290, 360, 420],
-  move:     [260, 325, 390, 455],
-  airbnb:   [125, 150, 180, 180],
+  basic:    [150, 190, 230, 285],
+  standard: [190, 230, 285, 335],
+  deep:     [275, 340, 420, 485],
+  move:     [305, 380, 450, 525],
+  airbnb:   [150, 180, 210, 210],
   office:   [null, null, null, null]
 };
 var SIZE_LABEL = ["Studio / 1 Bed", "2 Bed", "3 Bed", "4 Bed"];
