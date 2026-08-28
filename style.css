@@ -331,6 +331,7 @@ section.tight { padding: 60px 0; }
 
 /* ---------- Before / After slider ---------- */
 .ba-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+.ba-grid:has(> :only-child) { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; }
 .ba {
   position: relative; border-radius: var(--r-lg); overflow: hidden;
   box-shadow: var(--sh); background: var(--lav-100);

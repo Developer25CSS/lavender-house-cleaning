@@ -5,12 +5,6 @@
   },
   "beforeAfter": [
     {
-      "before": "bathroom-vanity-before.jpg",
-      "after": "bathroom-vanity-after.jpg",
-      "title": "Bathroom Vanity",
-      "caption": "Basin descaled, mirror polished, surround wiped down"
-    },
-    {
       "composite": "living-room-pair.jpg",
       "title": "Living Room",
       "caption": "Toys and clutter cleared, floors vacuumed and mopped"
