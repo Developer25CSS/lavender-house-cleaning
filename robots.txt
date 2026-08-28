@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lavendercleanco.com/sitemap.xml
+Sitemap: https://lavenderhousecleaning.company/sitemap.xml

@@ -53,6 +53,7 @@
         <button class="dash-tab active" data-tab="bookings">Bookings</button>
         <button class="dash-tab" data-tab="applicants">Applicants</button>
         <button class="dash-tab" data-tab="cleaners">Cleaners</button>
+        <button class="dash-tab" data-tab="reports">Reports</button>
       </div>
 
       <!-- ============ BOOKINGS ============ -->
@@ -94,6 +95,25 @@
             </thead>
             <tbody id="cleanersBody"></tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- ============ REPORTS ============ -->
+      <div class="dash-panel" id="panel-reports">
+        <div class="grid g4" id="reportStats" style="margin-top:16px;"></div>
+
+        <h3 style="margin-top:32px;">Revenue by Service (Completed Jobs)</h3>
+        <table class="booking-table" id="revenueByServiceTable"><tbody id="revenueByServiceBody"></tbody></table>
+
+        <h3 style="margin-top:32px;">Payroll Estimate</h3>
+        <p class="note">Based on the 2-hour minimum per completed job, not actual clocked hours.</p>
+        <table class="booking-table" id="payrollTable">
+          <thead><tr><th>Cleaner</th><th>Pay Track</th><th>Completed Jobs</th><th>Est. Hours</th><th>Est. Pay</th></tr></thead>
+          <tbody id="payrollBody"></tbody>
+        </table>
+
+        <div style="margin-top:32px;">
+          <a class="btn btn-primary" id="exportCsvLink" href="#" target="_blank">Download Full Bookings CSV (opens in Excel)</a>
         </div>
       </div>
     </div>
@@ -304,6 +324,44 @@ function loadCleaners() {
   });
 }
 
+/* ---- reports ---- */
+function statCard(value, label) {
+  var div = document.createElement('div');
+  div.className = 'info-box';
+  div.innerHTML = '<h3 style="margin:0;">' + value + '</h3><p class="note" style="margin:0;">' + label + '</p>';
+  return div;
+}
+
+function loadReports() {
+  document.getElementById('exportCsvLink').href = API_BASE + '/api/staff/reports/export.csv';
+
+  return apiFetch('/api/staff/reports/summary').then(function (r) {
+    var stats = document.getElementById('reportStats');
+    stats.innerHTML = '';
+    stats.appendChild(statCard('$' + r.totalCompletedRevenue, 'Total Revenue (Completed)'));
+    stats.appendChild(statCard(r.bookingCountsByStatus.PENDING || 0, 'Pending Bookings'));
+    stats.appendChild(statCard(r.bookingCountsByStatus.CONFIRMED || 0, 'Confirmed Bookings'));
+    stats.appendChild(statCard(r.bookingCountsByStatus.COMPLETED || 0, 'Completed Bookings'));
+
+    var svcBody = document.getElementById('revenueByServiceBody');
+    svcBody.innerHTML = '';
+    Object.keys(r.revenueByService).forEach(function (svc) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + svc + '</td><td>$' + r.revenueByService[svc] + '</td>';
+      svcBody.appendChild(tr);
+    });
+
+    var payBody = document.getElementById('payrollBody');
+    payBody.innerHTML = '';
+    r.payrollEstimate.forEach(function (p) {
+      var tr = document.createElement('tr');
+      var track = p.payTrack === 'OWN_SUPPLIES' ? '$30/hr' : '$25/hr';
+      tr.innerHTML = '<td>' + p.name + '</td><td>' + track + '</td><td>' + p.jobs + '</td><td>' + p.estimatedHours + '</td><td>$' + p.estimatedPay + '</td>';
+      payBody.appendChild(tr);
+    });
+  });
+}
+
 /* ---- boot ---- */
 apiFetch('/api/auth/me').then(function (user) {
   if (user.role !== 'STAFF' && user.role !== 'ADMIN') throw new Error('not staff');
@@ -311,7 +369,7 @@ apiFetch('/api/auth/me').then(function (user) {
   document.getElementById('loggedIn').style.display = '';
   document.getElementById('welcomeHeading').textContent = 'Dashboard — ' + user.name;
   // Cleaners loads first so the booking table's assignment dropdowns have data.
-  return loadCleaners().then(loadBookings).then(loadApplicants);
+  return loadCleaners().then(loadBookings).then(loadApplicants).then(loadReports);
 }).catch(function () {
   document.getElementById('loggedOut').style.display = '';
 });
