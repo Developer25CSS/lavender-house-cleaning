@@ -54,12 +54,14 @@
     var bubble = document.createElement('button');
     bubble.textContent = '💬';
     bubble.setAttribute('aria-label', 'Open chat');
-    bubble.style.cssText = 'position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;' +
+    bubble.className = 'cw-bubble';
+    bubble.style.cssText = 'position:fixed;right:20px;width:56px;height:56px;border-radius:50%;' +
       'background:var(--lav-700,#6f57b4);color:#fff;border:none;font-size:24px;cursor:pointer;' +
       'box-shadow:0 8px 20px rgba(0,0,0,.25);z-index:9999;';
 
     var panel = document.createElement('div');
-    panel.style.cssText = 'position:fixed;bottom:86px;right:20px;width:320px;max-width:calc(100vw - 40px);' +
+    panel.className = 'cw-panel';
+    panel.style.cssText = 'position:fixed;right:20px;width:320px;max-width:calc(100vw - 40px);' +
       'max-height:70vh;background:#fff;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.28);' +
       'display:none;flex-direction:column;overflow:hidden;z-index:9999;font-family:inherit;';
 

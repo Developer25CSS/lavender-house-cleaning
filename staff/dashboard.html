@@ -103,14 +103,18 @@
         <div class="grid g4" id="reportStats" style="margin-top:16px;"></div>
 
         <h3 style="margin-top:32px;">Revenue by Service (Completed Jobs)</h3>
-        <table class="booking-table" id="revenueByServiceTable"><tbody id="revenueByServiceBody"></tbody></table>
+        <div style="overflow-x:auto;">
+          <table class="booking-table" id="revenueByServiceTable"><tbody id="revenueByServiceBody"></tbody></table>
+        </div>
 
         <h3 style="margin-top:32px;">Payroll Estimate</h3>
         <p class="note">Based on the 2-hour minimum per completed job, not actual clocked hours.</p>
-        <table class="booking-table" id="payrollTable">
-          <thead><tr><th>Cleaner</th><th>Pay Track</th><th>Completed Jobs</th><th>Est. Hours</th><th>Est. Pay</th></tr></thead>
-          <tbody id="payrollBody"></tbody>
-        </table>
+        <div style="overflow-x:auto;">
+          <table class="booking-table" id="payrollTable">
+            <thead><tr><th>Cleaner</th><th>Pay Track</th><th>Completed Jobs</th><th>Est. Hours</th><th>Est. Pay</th></tr></thead>
+            <tbody id="payrollBody"></tbody>
+          </table>
+        </div>
 
         <div style="margin-top:32px;">
           <a class="btn btn-primary" id="exportCsvLink" href="#" target="_blank">Download Full Bookings CSV (opens in Excel)</a>

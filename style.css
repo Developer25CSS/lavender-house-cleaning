@@ -581,6 +581,19 @@ footer.site-footer { background: linear-gradient(180deg, var(--lav-50), var(--la
 .mobile-bar .mb-text { background: var(--lav-100); color: var(--lav-700); }
 .mobile-bar .mb-pay { background: var(--cream-mid); color: var(--lav-800); }
 
+/* Chat widget bubble/panel — lifted above .mobile-bar on mobile so the
+   two fixed elements don't overlap; .mobile-bar is ~68px tall + safe area. */
+.cw-bubble { bottom: 20px; }
+.cw-panel { bottom: 86px; }
+@media (max-width: 820px) {
+  .cw-bubble { bottom: calc(78px + env(safe-area-inset-bottom)); }
+  .cw-panel { bottom: calc(144px + env(safe-area-inset-bottom)); }
+}
+@media (max-height: 480px) and (orientation: landscape) {
+  .cw-bubble { bottom: 20px; }
+  .cw-panel { bottom: 86px; }
+}
+
 /* ---------- Responsive ---------- */
 
 
