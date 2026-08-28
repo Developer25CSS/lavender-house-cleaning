@@ -69,7 +69,7 @@
         <p class="note" id="emptyState" style="display:none;">You haven't made any bookings yet. <a href="booking.html" style="color:var(--lav-700);font-weight:700;">Book your first cleaning</a>.</p>
         <table class="booking-table" id="bookingsTable" style="display:none;">
           <thead>
-            <tr><th>Date Requested</th><th>Service</th><th>Home Size</th><th>Area</th><th>Total</th><th>Status</th></tr>
+            <tr><th>Date Requested</th><th>Service</th><th>Home Size</th><th>Area</th><th>Total</th><th>Status</th><th>Review</th></tr>
           </thead>
           <tbody id="bookingsBody"></tbody>
         </table>
@@ -106,13 +106,39 @@ apiFetch('/api/auth/me').then(function (user) {
   document.getElementById('bookingsTable').style.display = '';
   bookings.forEach(function (b) {
     var tr = document.createElement('tr');
+    var reviewCell;
+    if (b.review) {
+      reviewCell = b.review.rating + ' ★';
+    } else if (b.status === 'COMPLETED' && b.assignedCleaner) {
+      reviewCell = '<button class="btn btn-ghost review-btn" data-id="' + b.id + '">Leave a Review</button>';
+    } else {
+      reviewCell = '—';
+    }
     tr.innerHTML =
       '<td>' + new Date(b.createdAt).toLocaleDateString() + '</td>' +
       '<td>' + b.service + '</td>' +
       '<td>' + b.homeSize + '</td>' +
       '<td>' + b.area + '</td>' +
       '<td>' + (b.totalPrice ? '$' + b.totalPrice : '—') + '</td>' +
-      '<td><span class="status-pill status-' + b.status + '">' + b.status + '</span></td>';
+      '<td><span class="status-pill status-' + b.status + '">' + b.status + '</span></td>' +
+      '<td>' + reviewCell + '</td>';
+    var reviewBtn = tr.querySelector('.review-btn');
+    if (reviewBtn) {
+      reviewBtn.addEventListener('click', function () {
+        var rating = prompt('Rate your cleaner 1-5 stars:');
+        var ratingNum = parseInt(rating, 10);
+        if (!ratingNum || ratingNum < 1 || ratingNum > 5) return;
+        var comment = prompt('Any comments? (optional)') || '';
+        apiFetch('/api/reviews', {
+          method: 'POST',
+          body: JSON.stringify({ bookingId: b.id, rating: ratingNum, comment: comment })
+        }).then(function () {
+          window.location.reload();
+        }).catch(function (err) {
+          alert('Could not submit review: ' + err.message);
+        });
+      });
+    }
     body.appendChild(tr);
   });
 }).catch(function () {

@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="../style.css">
 <script>document.documentElement.className+=" js";</script>
 <style>
-  .dash-wrap { max-width:1100px; }
+  .dash-wrap { max-width:1200px; }
   .booking-table { width:100%; border-collapse:collapse; margin-top:24px; font-size:.9rem; }
   .booking-table th, .booking-table td { text-align:left; padding:12px 14px; border-bottom:1px solid var(--border, #e5dcf0); vertical-align:top; }
   .booking-table select { font-size:.85rem; padding:4px 8px; border-radius:6px; border:1px solid var(--border, #cbb8e0); }
@@ -18,6 +18,16 @@
   .status-CONFIRMED { background:#dcecff; color:#1c4e94; }
   .status-COMPLETED { background:#dff5e3; color:#1e6b39; }
   .status-CANCELLED { background:#fbdede; color:#9c2626; }
+  .status-ACTIVE { background:#dff5e3; color:#1e6b39; }
+  .status-WARNED { background:#fdf1d6; color:#8a6415; }
+  .status-TERMINATED { background:#fbdede; color:#9c2626; }
+  .dash-tabs { display:flex; gap:8px; margin-top:24px; flex-wrap:wrap; }
+  .dash-tab { padding:8px 16px; border-radius:999px; border:1px solid var(--border, #cbb8e0); background:none; cursor:pointer; font-weight:600; }
+  .dash-tab.active { background:var(--lav-600); color:#fff; border-color:var(--lav-600); }
+  .dash-panel { display:none; }
+  .dash-panel.active { display:block; }
+  .flagged-row { background:#fff4f4; }
+  .discipline-item { font-size:.85rem; padding:6px 0; border-bottom:1px solid var(--border, #eee); }
 </style>
 </head>
 <body>
@@ -34,22 +44,57 @@
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
         <div>
           <span class="eyebrow">Staff Dashboard</span>
-          <h1 id="welcomeHeading" style="margin:0;">Bookings</h1>
+          <h1 id="welcomeHeading" style="margin:0;">Dashboard</h1>
         </div>
         <button class="btn btn-ghost" id="logoutBtn">Log Out</button>
       </div>
 
-      <p class="note" id="emptyState" style="display:none;">No bookings yet.</p>
-      <div style="overflow-x:auto;">
-        <table class="booking-table" id="bookingsTable" style="display:none;">
-          <thead>
-            <tr>
-              <th>Requested</th><th>Customer</th><th>Contact</th><th>Service</th>
-              <th>Home Size</th><th>Area</th><th>Add-Ons</th><th>Total</th><th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="bookingsBody"></tbody>
-        </table>
+      <div class="dash-tabs">
+        <button class="dash-tab active" data-tab="bookings">Bookings</button>
+        <button class="dash-tab" data-tab="applicants">Applicants</button>
+        <button class="dash-tab" data-tab="cleaners">Cleaners</button>
+      </div>
+
+      <!-- ============ BOOKINGS ============ -->
+      <div class="dash-panel active" id="panel-bookings">
+        <p class="note" id="emptyState" style="display:none;">No bookings yet.</p>
+        <div style="overflow-x:auto;">
+          <table class="booking-table" id="bookingsTable" style="display:none;">
+            <thead>
+              <tr>
+                <th>Requested</th><th>Customer</th><th>Contact</th><th>Service</th>
+                <th>Home Size</th><th>Area</th><th>Add-Ons</th><th>Total</th><th>Cleaner</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="bookingsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ APPLICANTS ============ -->
+      <div class="dash-panel" id="panel-applicants">
+        <p class="note" id="applicantsEmpty" style="display:none;">No applicants yet.</p>
+        <div style="overflow-x:auto;">
+          <table class="booking-table" id="applicantsTable" style="display:none;">
+            <thead>
+              <tr><th>Applied</th><th>Name</th><th>Contact</th><th>Pay Track</th><th>Quiz</th><th>Status</th><th>Action</th></tr>
+            </thead>
+            <tbody id="applicantsBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============ CLEANERS ============ -->
+      <div class="dash-panel" id="panel-cleaners">
+        <p class="note" id="cleanersEmpty" style="display:none;">No cleaners yet.</p>
+        <div style="overflow-x:auto;">
+          <table class="booking-table" id="cleanersTable" style="display:none;">
+            <thead>
+              <tr><th>Name</th><th>Pay Track</th><th>Rating</th><th>Status</th><th>Discipline Log</th><th id="cleanerActionHeader">Admin Actions</th></tr>
+            </thead>
+            <tbody id="cleanersBody"></tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -59,8 +104,30 @@
 <script src="../assets/api.js"></script>
 <script>
 var STATUSES = ["PENDING", "CONFIRMED", "COMPLETED", "CANCELLED"];
+var EMP_STATUSES = ["ACTIVE", "WARNED", "TERMINATED"];
+var currentUser = null;
+var activeCleaners = [];
 
-function renderRow(b) {
+/* ---- tabs ---- */
+document.querySelectorAll('.dash-tab').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    document.querySelectorAll('.dash-tab').forEach(function (b) { b.classList.remove('active'); });
+    document.querySelectorAll('.dash-panel').forEach(function (p) { p.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ---- bookings ---- */
+function cleanerSelect(booking) {
+  var opts = '<option value="">Unassigned</option>' + activeCleaners.map(function (c) {
+    var selected = booking.assignedCleaner && booking.assignedCleaner.id === c.id ? ' selected' : '';
+    return '<option value="' + c.id + '"' + selected + '>' + c.name + '</option>';
+  }).join('');
+  return '<select data-booking-id="' + booking.id + '" class="cleaner-select">' + opts + '</select>';
+}
+
+function renderBookingRow(b) {
   var tr = document.createElement('tr');
   var options = STATUSES.map(function (s) {
     return '<option value="' + s + '"' + (s === b.status ? ' selected' : '') + '>' + s + '</option>';
@@ -75,33 +142,176 @@ function renderRow(b) {
     '<td>' + b.area + '</td>' +
     '<td>' + (b.addons || '—') + '</td>' +
     '<td>' + (b.totalPrice ? '$' + b.totalPrice : '—') + '</td>' +
-    '<td><select data-id="' + b.id + '">' + options + '</select></td>';
+    '<td>' + cleanerSelect(b) + '</td>' +
+    '<td><select data-id="' + b.id + '" class="status-select">' + options + '</select></td>';
 
-  tr.querySelector('select').addEventListener('change', function (e) {
+  tr.querySelector('.status-select').addEventListener('change', function (e) {
     apiFetch('/api/bookings/' + e.target.dataset.id, {
       method: 'PATCH',
       body: JSON.stringify({ status: e.target.value })
-    }).catch(function (err) {
-      alert('Could not update status: ' + err.message);
-    });
+    }).catch(function (err) { alert('Could not update status: ' + err.message); });
+  });
+
+  tr.querySelector('.cleaner-select').addEventListener('change', function (e) {
+    apiFetch('/api/bookings/' + e.target.dataset.bookingId + '/assign-cleaner', {
+      method: 'PATCH',
+      body: JSON.stringify({ cleanerId: e.target.value || null })
+    }).catch(function (err) { alert('Could not assign cleaner: ' + err.message); });
   });
 
   return tr;
 }
 
+function loadBookings() {
+  return apiFetch('/api/bookings').then(function (bookings) {
+    if (!bookings.length) {
+      document.getElementById('emptyState').style.display = '';
+      return;
+    }
+    document.getElementById('bookingsTable').style.display = '';
+    var body = document.getElementById('bookingsBody');
+    body.innerHTML = '';
+    bookings.forEach(function (b) { body.appendChild(renderBookingRow(b)); });
+  });
+}
+
+/* ---- applicants ---- */
+function renderApplicantRow(a) {
+  var tr = document.createElement('tr');
+  var track = a.payTrack === 'OWN_SUPPLIES' ? '$30/hr (own supplies)' : '$25/hr (company supplies)';
+  var quiz = a.quizPassed ? '<span class="status-pill status-ACTIVE">Passed</span>' : '<span class="status-pill status-TERMINATED">Failed</span>';
+  var actions = a.status === 'PENDING'
+    ? '<button class="btn btn-ghost hire-btn" data-id="' + a.id + '"' + (a.quizPassed ? '' : ' disabled') + '>Hire</button> ' +
+      '<button class="btn btn-ghost reject-btn" data-id="' + a.id + '">Reject</button>'
+    : a.status;
+
+  tr.innerHTML =
+    '<td>' + new Date(a.createdAt).toLocaleDateString() + '</td>' +
+    '<td>' + a.name + '</td>' +
+    '<td>' + a.phone + '<br>' + a.email + '</td>' +
+    '<td>' + track + '</td>' +
+    '<td>' + quiz + ' (' + a.quizScore + '/30)</td>' +
+    '<td>' + a.status + '</td>' +
+    '<td>' + actions + '</td>';
+
+  var hireBtn = tr.querySelector('.hire-btn');
+  if (hireBtn) {
+    hireBtn.addEventListener('click', function () {
+      apiFetch('/api/staff/applicants/' + a.id, { method: 'PATCH', body: JSON.stringify({ status: 'HIRED' }) })
+        .then(function (result) {
+          alert('Hired! Give this one-time setup link to ' + a.name + ' so they can set their password:\n\n' +
+            window.location.origin + '/set-password.html?token=' + result.inviteToken);
+          loadApplicants();
+          loadCleaners();
+        })
+        .catch(function (err) { alert('Could not hire: ' + err.message); });
+    });
+  }
+  var rejectBtn = tr.querySelector('.reject-btn');
+  if (rejectBtn) {
+    rejectBtn.addEventListener('click', function () {
+      apiFetch('/api/staff/applicants/' + a.id, { method: 'PATCH', body: JSON.stringify({ status: 'REJECTED' }) })
+        .then(loadApplicants)
+        .catch(function (err) { alert('Could not reject: ' + err.message); });
+    });
+  }
+
+  return tr;
+}
+
+function loadApplicants() {
+  return apiFetch('/api/staff/applicants').then(function (applicants) {
+    var body = document.getElementById('applicantsBody');
+    body.innerHTML = '';
+    if (!applicants.length) {
+      document.getElementById('applicantsEmpty').style.display = '';
+      document.getElementById('applicantsTable').style.display = 'none';
+      return;
+    }
+    document.getElementById('applicantsEmpty').style.display = 'none';
+    document.getElementById('applicantsTable').style.display = '';
+    applicants.forEach(function (a) { body.appendChild(renderApplicantRow(a)); });
+  });
+}
+
+/* ---- cleaners ---- */
+function renderCleanerRow(c) {
+  var tr = document.createElement('tr');
+  if (c.flagged) tr.className = 'flagged-row';
+
+  var track = c.payTrack === 'OWN_SUPPLIES' ? '$30/hr' : c.payTrack === 'COMPANY_SUPPLIES' ? '$25/hr' : '—';
+  var rating = c.avgRating !== null ? c.avgRating.toFixed(1) + ' ★ (' + c.reviewCount + ')' : 'No reviews yet';
+  if (c.flagged) rating += ' ⚠️ below 4.0';
+
+  var disciplineHtml = c.discipline.length
+    ? c.discipline.map(function (d) {
+        return '<div class="discipline-item">' + new Date(d.createdAt).toLocaleDateString() + ' — ' + d.note + ' <em>(' + d.issuedBy.name + ')</em></div>';
+      }).join('')
+    : '<span class="note">None</span>';
+
+  var isAdmin = currentUser.role === 'ADMIN';
+  var actionsHtml = '<span class="note">View only</span>';
+  if (isAdmin) {
+    var statusOpts = EMP_STATUSES.map(function (s) {
+      return '<option value="' + s + '"' + (s === c.employmentStatus ? ' selected' : '') + '>' + s + '</option>';
+    }).join('');
+    actionsHtml =
+      '<select data-id="' + c.id + '" class="emp-status-select">' + statusOpts + '</select><br>' +
+      '<input type="text" class="discipline-note" placeholder="Add a discipline note" style="margin-top:6px;width:100%;">' +
+      '<button class="btn btn-ghost add-note-btn" data-id="' + c.id + '" style="margin-top:4px;">Add Note</button>';
+  }
+
+  tr.innerHTML =
+    '<td>' + c.name + '<br><span class="note">' + c.role + '</span></td>' +
+    '<td>' + track + '</td>' +
+    '<td>' + rating + '</td>' +
+    '<td><span class="status-pill status-' + c.employmentStatus + '">' + c.employmentStatus + '</span></td>' +
+    '<td>' + disciplineHtml + '</td>' +
+    '<td>' + actionsHtml + '</td>';
+
+  if (isAdmin) {
+    tr.querySelector('.emp-status-select').addEventListener('change', function (e) {
+      apiFetch('/api/staff/cleaners/' + e.target.dataset.id + '/status', {
+        method: 'PATCH', body: JSON.stringify({ employmentStatus: e.target.value })
+      }).then(loadCleaners).catch(function (err) { alert('Could not update status: ' + err.message); });
+    });
+    tr.querySelector('.add-note-btn').addEventListener('click', function (e) {
+      var input = tr.querySelector('.discipline-note');
+      if (!input.value.trim()) return;
+      apiFetch('/api/staff/cleaners/' + e.target.dataset.id + '/discipline', {
+        method: 'POST', body: JSON.stringify({ note: input.value.trim() })
+      }).then(loadCleaners).catch(function (err) { alert('Could not add note: ' + err.message); });
+    });
+  }
+
+  return tr;
+}
+
+function loadCleaners() {
+  return apiFetch('/api/staff/cleaners').then(function (cleaners) {
+    activeCleaners = cleaners.filter(function (c) { return c.employmentStatus === 'ACTIVE'; });
+    var body = document.getElementById('cleanersBody');
+    body.innerHTML = '';
+    if (!cleaners.length) {
+      document.getElementById('cleanersEmpty').style.display = '';
+      document.getElementById('cleanersTable').style.display = 'none';
+      return;
+    }
+    document.getElementById('cleanersEmpty').style.display = 'none';
+    document.getElementById('cleanersTable').style.display = '';
+    if (currentUser.role !== 'ADMIN') document.getElementById('cleanerActionHeader').textContent = '';
+    cleaners.forEach(function (c) { body.appendChild(renderCleanerRow(c)); });
+  });
+}
+
+/* ---- boot ---- */
 apiFetch('/api/auth/me').then(function (user) {
   if (user.role !== 'STAFF' && user.role !== 'ADMIN') throw new Error('not staff');
+  currentUser = user;
   document.getElementById('loggedIn').style.display = '';
-  document.getElementById('welcomeHeading').textContent = 'Bookings — ' + user.name;
-  return apiFetch('/api/bookings');
-}).then(function (bookings) {
-  if (!bookings.length) {
-    document.getElementById('emptyState').style.display = '';
-    return;
-  }
-  document.getElementById('bookingsTable').style.display = '';
-  var body = document.getElementById('bookingsBody');
-  bookings.forEach(function (b) { body.appendChild(renderRow(b)); });
+  document.getElementById('welcomeHeading').textContent = 'Dashboard — ' + user.name;
+  // Cleaners loads first so the booking table's assignment dropdowns have data.
+  return loadCleaners().then(loadBookings).then(loadApplicants);
 }).catch(function () {
   document.getElementById('loggedOut').style.display = '';
 });
