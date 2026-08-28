@@ -4,7 +4,7 @@ Static marketing site for Lavender House Cleaning, serving Colorado statewide.
 No build step, no dependencies, no server. Open `index.html` and it runs.
 
 **Live site:** _add your URL here after deploying_
-**Phone:** 442.588.0028 · **Email:** info@orkdcorp.com
+**Phone:** 442.588.0028 · **Email:** info@lavenderhousecleaning.company
 
 ---
 
