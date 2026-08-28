@@ -1,9 +1,8 @@
 /* ============================================================
-   Shared API helper. Set API_BASE once your Render backend is
-   live (see lavender-house-cleaning-api README), e.g.:
-   var API_BASE = "https://lavender-house-cleaning-api.onrender.com";
+   Shared API helper. Points at the Cloudflare Worker backend
+   (see lavender-house-cleaning-api README).
    ============================================================ */
-var API_BASE = "";
+var API_BASE = "https://lavender-house-cleaning-api.developer-980.workers.dev";
 
 function apiFetch(path, options) {
   options = options || {};
