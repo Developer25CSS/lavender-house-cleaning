@@ -167,8 +167,10 @@ section.tight { padding: 60px 0; }
   top: 0;
   z-index: 50;
 }
-.nav-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 0; }
-.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--lav-700); line-height: 1.15; }
+.nav-row { display: flex; align-items: center; justify-content: flex-start; gap: 20px; padding: 14px 0; }
+.brand { order: 3; display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--lav-700); line-height: 1.15; }
+.main-nav { order: 1; flex: 1; }
+.nav-actions { order: 2; }
 .brand .mark {
   width: 40px; height: 40px; flex: 0 0 40px;
   border-radius: 12px;
@@ -230,8 +232,9 @@ section.tight { padding: 60px 0; }
 
 /* Hero image collage */
 .hero-media { position: relative; }
-.hero-media .photo { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-lg); }
-.hero-media .photo img { width: 100%; height: 420px; object-fit: cover; }
+.hero-media .photo { position: relative; border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh-lg); height: 420px; }
+.hero-media .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.8s ease; }
+.hero-media .photo img.active { opacity: 1; z-index: 1; }
 .float-card {
   position: absolute;
   background: var(--white);
@@ -878,7 +881,7 @@ html { overflow-x: clip; }
   .hero-grid, .split { grid-template-columns: 1fr; gap: 42px; }
   .hero-media { order: -1; }
   .split .media img { height: 340px; }
-  .hero-media .photo img { height: 360px; }
+  .hero-media .photo { height: 360px; }
   .float-card.tl { top: 14px; left: 10px; }
   .float-card.br { bottom: 14px; right: 10px; }
   .g4, .stats, .pay-grid, .contact-grid, .gallery, .perks { grid-template-columns: repeat(2, 1fr); }
@@ -910,7 +913,7 @@ html { overflow-x: clip; }
 
   .form-row { grid-template-columns: 1fr; gap: 0; }
   .form-card { padding: 26px 20px; }
-  .hero-media .photo img { height: 290px; }
+  .hero-media .photo { height: 290px; }
   .split .media img { height: 280px; }
   .topbar .tb-right { display: none; }
   .topbar .wrap { justify-content: center; text-align: center; }
@@ -943,7 +946,7 @@ html { overflow-x: clip; }
 
   .float-card { display: none; }
   .hero { padding: 44px 0 54px; }
-  .hero-media .photo img { height: 240px; }
+  .hero-media .photo { height: 240px; }
   .hero-badges { gap: 8px; }
   .pill { font-size: .78rem; padding: 6px 13px; }
 
@@ -988,7 +991,7 @@ html { overflow-x: clip; }
 /* ---- Short landscape phones ---- */
 @media (max-height: 480px) and (orientation: landscape) {
   .hero { padding: 34px 0 40px; }
-  .hero-media .photo img { height: 200px; }
+  .hero-media .photo { height: 200px; }
   .mobile-bar { display: none; }
   body { padding-bottom: 0; }
   .main-nav { max-height: 70vh; }

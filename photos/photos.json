@@ -3,6 +3,12 @@
     "file": "hero.jpg",
     "alt": "Beautifully cleaned high-end living room with panoramic views"
   },
+  "heroSlides": [
+    {
+      "file": "hero.jpg",
+      "alt": "Beautifully cleaned high-end living room with panoramic views"
+    }
+  ],
   "beforeAfter": [
     {
       "composite": "living-room-pair.jpg",

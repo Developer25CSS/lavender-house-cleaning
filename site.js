@@ -472,17 +472,37 @@
     }).join('');
   }
 
+  /* ---------- Hero slideshow: up to 4 photos, auto-crossfading, no controls ---------- */
+  function buildHeroSlideshow(list, host) {
+    if (!host || !list.length) return;
+    list = list.slice(0, 4);
+    host.innerHTML = list.map(function (p, i) {
+      return '<img class="' + (i === 0 ? 'active' : '') + '" src="photos/' + esc(p.file) + '" alt="' +
+        esc(p.alt || '') + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '">';
+    }).join('');
+    if (list.length < 2 || reduced) return;
+    var imgs = host.querySelectorAll('img');
+    var i = 0;
+    setInterval(function () {
+      imgs[i].classList.remove('active');
+      i = (i + 1) % imgs.length;
+      imgs[i].classList.add('active');
+    }, 7000);
+  }
+
   function loadPhotos(done) {
     var ba = document.getElementById('beforeAfter');
     var dt = document.getElementById('detailGrid');
     var gl = document.getElementById('galleryRail');
-    if (!ba && !dt && !gl) { done(); return; }
+    var hs = document.getElementById('heroSlideshow');
+    if (!ba && !dt && !gl && !hs) { done(); return; }
     fetch('photos/photos.json', { cache: 'no-cache' })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (d) {
         buildBeforeAfter(d.beforeAfter || [], ba);
         buildCards(d.details || [], dt, 'detail-card');
         buildCards(d.gallery || [], gl, 'rail-item');
+        buildHeroSlideshow(d.heroSlides || [], hs);
         done();
       })
       .catch(function (e) {
