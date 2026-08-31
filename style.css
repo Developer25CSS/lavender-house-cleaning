@@ -168,8 +168,16 @@ section.tight { padding: 60px 0; }
   z-index: 50;
 }
 .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 0; }
-.brand { display: flex; align-items: center; font-family: var(--font-display); font-weight: 700; color: var(--lav-700); line-height: 1.15; }
-.brand .mark-logo { height: 58px; width: auto; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--lav-700); line-height: 1.15; }
+.brand .mark {
+  width: 40px; height: 40px; flex: 0 0 40px;
+  border-radius: 12px;
+  background: linear-gradient(140deg, var(--lav-300), var(--lav-600));
+  display: grid; place-items: center;
+  font-size: 1.15rem;
+  box-shadow: var(--sh-sm);
+}
+.brand small { display: block; font-family: var(--font-body); font-size: .64rem; letter-spacing: .16em; text-transform: uppercase; color: var(--lav-400); font-weight: 700; }
 
 .main-nav { display: flex; gap: 26px; align-items: center; font-weight: 600; font-size: .95rem; }
 .main-nav a { color: var(--ink); padding: 8px 0; border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; }
@@ -562,8 +570,8 @@ footer.site-footer { background: linear-gradient(180deg, var(--lav-50), var(--la
 .foot-grid ul { list-style: none; }
 .foot-grid ul li { margin-bottom: 9px; }
 .foot-grid a:hover { color: var(--lav-700); }
-.foot-brand { display: flex; align-items: center; margin-bottom: 14px; }
-.foot-brand .mark-logo { height: 50px; width: auto; }
+.foot-brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 1.25rem; color: var(--lav-800); margin-bottom: 14px; }
+.foot-brand .mark { width: 38px; height: 38px; border-radius: 11px; background: linear-gradient(140deg, var(--lav-300), var(--lav-600)); display: grid; place-items: center; }
 .foot-phone { display: block; font-family: var(--font-display); font-size: 1.4rem; color: var(--lav-700); font-weight: 700; margin: 6px 0 4px; }
 .foot-phone:hover { color: var(--lav-600); }
 .foot-bottom { border-top: 1px solid var(--line); padding: 22px 0; text-align: center; font-size: .84rem; color: var(--body); }
@@ -852,6 +860,7 @@ html { overflow-x: clip; }
 @media (max-width: 1150px) {
   .main-nav { gap: 18px; font-size: .9rem; }
   .nav-btn { padding: 10px 16px; font-size: .84rem; }
+  .brand { font-size: 1.18rem; }
 }
 
 /* ---- 1000px : stack hero + split, 2-up grids ---- */
@@ -955,7 +964,9 @@ html { overflow-x: clip; }
 /* ---- 400px : small phones ---- */
 @media (max-width: 400px) {
   .wrap { padding: 0 14px; }
-  .brand .mark-logo { height: 46px; }
+  .brand { font-size: 1.05rem; gap: 8px; }
+  .brand .mark { width: 34px; height: 34px; flex-basis: 34px; font-size: 1rem; }
+  .brand small { font-size: .58rem; letter-spacing: .12em; }
   .nav-btn.pay { padding: 9px 13px; font-size: .78rem; }
   .btn { padding: 14px 20px; font-size: .94rem; }
   .btn-lg { padding: 15px 20px; font-size: .96rem; }
@@ -1092,6 +1103,17 @@ html { overflow-x: clip; }
   .qb-total .sum { font-size: 2.3rem; }
 }
 
+/* ---------- Real logo mark in header & footer ---------- */
+.brand .mark {
+  background: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  width: 46px; height: 46px; flex: 0 0 46px;
+}
+.foot-brand .mark { width: 42px; height: 42px; flex: 0 0 42px; }
+@media (max-width: 400px) {
+  .brand .mark { width: 38px; height: 38px; flex-basis: 38px; }
+}
 
 /* ---------- Legal pages ---------- */
 .legal h2 { font-size: 1.3rem; margin: 34px 0 10px; color: var(--lav-800); }
@@ -1252,5 +1274,12 @@ body.nav-open { overflow: hidden; }
   .foot-col ul li a { display: block; padding: 12px 0; min-height: 46px; }
   .foot-grid { gap: 0; padding-bottom: 26px; }
   .foot-brand-col { padding-bottom: 22px; }
+}
+
+/* ---------- Photographic logo mark ---------- */
+.brand .mark, .foot-brand .mark {
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(109,65,147,.18);
+  object-fit: cover;
 }
 
