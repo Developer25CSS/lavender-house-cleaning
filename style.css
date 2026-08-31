@@ -660,7 +660,7 @@ footer.site-footer { background: linear-gradient(180deg, var(--lav-50), var(--la
 .petals { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
 .petal {
   position: absolute; top: -8%;
-  font-size: 15px; opacity: .32;
+  display: block; opacity: .38;
   animation: drift linear infinite;
   will-change: transform;
 }
