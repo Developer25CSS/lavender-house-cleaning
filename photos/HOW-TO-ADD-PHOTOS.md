@@ -62,23 +62,6 @@ greasy oven vents, scaled faucets, mildewed window tracks.
 Replace `hero.jpg` with your own (keep the same filename), or change the
 `"file"` value under `"hero"`.
 
-## Adding more photos to the big photo at the top (up to 4)
-
-The big hero photo can hold up to 4 pictures that slowly crossfade into each
-other in the background — no clicking, no arrows, just ambient movement.
-This is controlled by the `"heroSlides"` list:
-
-```json
-"heroSlides": [
-  { "file": "hero.jpg", "alt": "Beautifully cleaned high-end living room" },
-  { "file": "before-after-composite.jpg", "alt": "Living room before and after" }
-]
-```
-
-Add up to 4 entries total (same shape as above — `"file"` and `"alt"`). One
-entry means no animation, just a still photo. Two or more and they'll
-automatically fade between each other every 7 seconds once the page is live.
-
 ---
 
 ## Photo tips

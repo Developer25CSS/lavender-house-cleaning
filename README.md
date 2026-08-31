@@ -3,7 +3,7 @@
 Static marketing site for Lavender House Cleaning, serving Colorado statewide.
 No build step, no dependencies, no server. Open `index.html` and it runs.
 
-**Live site:** https://www.lavenderhousecleaning.company
+**Live site:** _add your URL here after deploying_
 **Phone:** 442.588.0028 · **Email:** info@lavenderhousecleaning.company
 
 ---
@@ -24,30 +24,6 @@ python3 -m http.server 8000
 ```
 
 ---
-
-## Deploying to Cloudflare Pages (what this site actually runs on)
-
-This site is live at [www.lavenderhousecleaning.company](https://www.lavenderhousecleaning.company)
-via **Cloudflare Pages**, connected directly to this GitHub repo:
-
-1. Cloudflare Pages project is connected to `Developer25CSS/lavender-house-cleaning` —
-   every push to `main` triggers an automatic rebuild and redeploy. No build
-   command is needed; it's already plain HTML/CSS/JS.
-2. The custom domain `www.lavenderhousecleaning.company` is attached under
-   the Pages project's **Custom domains** tab, with DNS managed by Cloudflare.
-3. The backend API (`lavender-house-cleaning-api`, a separate repo) is a
-   Cloudflare Worker that also auto-deploys from its own `main` via
-   Cloudflare Workers Builds. Its `CORS_ORIGIN` includes this domain so
-   logged-in requests (login, bookings, `/api/auth/me`) work correctly.
-
-Since deploys are automatic, "deploying" this site just means merging a PR
-to `main` — there's no manual `wrangler pages deploy` or dashboard upload
-step in normal use. The `CNAME` file in this repo is a leftover from an
-earlier GitHub Pages setup; Cloudflare Pages ignores it, so it's harmless
-to leave in place.
-
-The GitHub Pages instructions below are kept for reference (e.g. if this
-site is ever forked or moved), but are not how the live site is served.
 
 ## Deploying to GitHub Pages
 

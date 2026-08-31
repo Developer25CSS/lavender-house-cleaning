@@ -173,18 +173,6 @@
   }
 
   /* ---------- Floating lavender petals ---------- */
-  var SPRIG_SVG = '<svg viewBox="0 0 20 34" width="100%" height="100%" fill="none">' +
-    '<path d="M10 34 C9 24 9 14 10 4" stroke="#7a8f5c" stroke-width="1.1" stroke-linecap="round"/>' +
-    '<g fill="currentColor">' +
-    '<ellipse cx="10" cy="4" rx="1.6" ry="2.5"/>' +
-    '<ellipse cx="8.2" cy="6.9" rx="1.5" ry="2.3" transform="rotate(-22 8.2 6.9)"/>' +
-    '<ellipse cx="11.8" cy="6.9" rx="1.5" ry="2.3" transform="rotate(22 11.8 6.9)"/>' +
-    '<ellipse cx="8.5" cy="10.4" rx="1.4" ry="2.1" transform="rotate(-26 8.5 10.4)"/>' +
-    '<ellipse cx="11.5" cy="10.4" rx="1.4" ry="2.1" transform="rotate(26 11.5 10.4)"/>' +
-    '<ellipse cx="10" cy="13.2" rx="1.3" ry="2"/>' +
-    '</g></svg>';
-  var SPRIG_SHADES = ['#8f6bab', '#7c5a99', '#a679c2', '#9670b0'];
-
   function initPetals() {
     if (reduced) return;
     [].forEach.call(document.querySelectorAll('[data-petals]'), function (host) {
@@ -194,12 +182,9 @@
       for (var i = 0; i < n; i++) {
         var p = document.createElement('span');
         p.className = 'petal';
-        p.innerHTML = SPRIG_SVG;
+        p.textContent = '🪻';
         p.style.left = (Math.random() * 100) + '%';
-        var size = 14 + Math.random() * 14;
-        p.style.width = size + 'px';
-        p.style.height = (size * 1.7) + 'px';
-        p.style.color = SPRIG_SHADES[i % SPRIG_SHADES.length];
+        p.style.fontSize = (10 + Math.random() * 12) + 'px';
         p.style.animationDuration = (14 + Math.random() * 16) + 's';
         p.style.animationDelay = (-Math.random() * 24) + 's';
         p.style.setProperty('--dx', ((Math.random() - 0.5) * 200).toFixed(0) + 'px');
@@ -472,37 +457,17 @@
     }).join('');
   }
 
-  /* ---------- Hero slideshow: up to 4 photos, auto-crossfading, no controls ---------- */
-  function buildHeroSlideshow(list, host) {
-    if (!host || !list.length) return;
-    list = list.slice(0, 4);
-    host.innerHTML = list.map(function (p, i) {
-      return '<img class="' + (i === 0 ? 'active' : '') + '" src="photos/' + esc(p.file) + '" alt="' +
-        esc(p.alt || '') + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '">';
-    }).join('');
-    if (list.length < 2 || reduced) return;
-    var imgs = host.querySelectorAll('img');
-    var i = 0;
-    setInterval(function () {
-      imgs[i].classList.remove('active');
-      i = (i + 1) % imgs.length;
-      imgs[i].classList.add('active');
-    }, 7000);
-  }
-
   function loadPhotos(done) {
     var ba = document.getElementById('beforeAfter');
     var dt = document.getElementById('detailGrid');
     var gl = document.getElementById('galleryRail');
-    var hs = document.getElementById('heroSlideshow');
-    if (!ba && !dt && !gl && !hs) { done(); return; }
+    if (!ba && !dt && !gl) { done(); return; }
     fetch('photos/photos.json', { cache: 'no-cache' })
       .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(function (d) {
         buildBeforeAfter(d.beforeAfter || [], ba);
         buildCards(d.details || [], dt, 'detail-card');
         buildCards(d.gallery || [], gl, 'rail-item');
-        buildHeroSlideshow(d.heroSlides || [], hs);
         done();
       })
       .catch(function (e) {
