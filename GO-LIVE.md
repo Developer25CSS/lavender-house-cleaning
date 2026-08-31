@@ -1,5 +1,14 @@
 # Go Live — lavendercleanco.com
 
+> **Update:** the site is already live at
+> [www.lavenderhousecleaning.company](https://www.lavenderhousecleaning.company)
+> via Cloudflare Pages (auto-deploys from `main`), not the GitHub
+> Pages + `lavendercleanco.com` setup this file walks through below. See the
+> README's "Deploying to Cloudflare Pages" section for how it's actually
+> configured. The Stripe, Google Business Profile, and "still to do before
+> taking real money" sections further down are still accurate and worth
+> reading regardless of hosting.
+
 Four steps, about 30 minutes of your time plus waiting for DNS.
 
 ---
