@@ -390,6 +390,21 @@ section.tight { padding: 60px 0; }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
 .split .media { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh); }
 .split .media img { width: 100%; height: 460px; object-fit: cover; }
+
+/* Photo with an overlapping circular brand badge (badge must live outside the photo's own overflow:hidden) */
+.badge-media { position: relative; }
+.badge-media-inner { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh); }
+.badge-media-inner img { width: 100%; height: 460px; object-fit: cover; }
+.brand-badge {
+  position: absolute; bottom: -28px; right: -28px;
+  width: 160px; height: 160px; border-radius: 50%;
+  box-shadow: 0 12px 30px rgba(80,50,110,.3);
+  border: 5px solid var(--white);
+  background: var(--white);
+}
+@media (max-width: 640px) {
+  .brand-badge { width: 110px; height: 110px; bottom: -16px; right: -12px; border-width: 3px; }
+}
 .check-list { list-style: none; margin-top: 22px; }
 .check-list li { padding: 9px 0 9px 34px; position: relative; font-weight: 600; color: var(--ink); font-size: .98rem; }
 .check-list li::before {
@@ -870,6 +885,7 @@ html { overflow-x: clip; }
   .hero-grid, .split { grid-template-columns: 1fr; gap: 42px; }
   .hero-media { order: -1; }
   .split .media img { height: 340px; }
+  .badge-media-inner img { height: 340px; }
   .hero-media .photo img { height: 360px; }
   .float-card.tl { top: 14px; left: 10px; }
   .float-card.br { bottom: 14px; right: 10px; }
@@ -904,6 +920,7 @@ html { overflow-x: clip; }
   .form-card { padding: 26px 20px; }
   .hero-media .photo img { height: 290px; }
   .split .media img { height: 280px; }
+  .badge-media-inner img { height: 280px; }
   .topbar .tb-right { display: none; }
   .topbar .wrap { justify-content: center; text-align: center; }
   .topbar { font-size: .8rem; }
