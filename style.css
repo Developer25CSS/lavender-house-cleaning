@@ -397,9 +397,9 @@ section.tight { padding: 60px 0; }
 /* Standalone circular brand badge — its own element, not overlapping the photo */
 .brand-badge {
   display: block;
-  width: 140px; height: 140px; border-radius: 50%;
-  box-shadow: 0 8px 20px rgba(80,50,110,.25);
-  margin-bottom: 22px;
+  width: 210px; height: 210px; border-radius: 50%;
+  box-shadow: 0 10px 26px rgba(80,50,110,.28);
+  margin-bottom: 24px;
 }
 .check-list { list-style: none; margin-top: 22px; }
 .check-list li { padding: 9px 0 9px 34px; position: relative; font-weight: 600; color: var(--ink); font-size: .98rem; }
