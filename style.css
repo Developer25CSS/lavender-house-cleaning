@@ -390,6 +390,17 @@ section.tight { padding: 60px 0; }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
 .split .media { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh); }
 .split .media img { width: 100%; height: 460px; object-fit: cover; }
+
+/* Standalone circular brand badge — its own element, never overlapping the photo.
+   Source PNG is already a true circular cutout (transparent corners), so no
+   border-radius/object-fit clipping is needed; drop-shadow follows the circle
+   itself instead of the image's square bounding box. */
+.brand-badge {
+  display: block;
+  width: 210px; height: 210px;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 10px 22px rgba(80,50,110,.32));
+}
 .check-list { list-style: none; margin-top: 22px; }
 .check-list li { padding: 9px 0 9px 34px; position: relative; font-weight: 600; color: var(--ink); font-size: .98rem; }
 .check-list li::before {
@@ -904,6 +915,7 @@ html { overflow-x: clip; }
   .form-card { padding: 26px 20px; }
   .hero-media .photo img { height: 290px; }
   .split .media img { height: 280px; }
+  .brand-badge { width: 150px; height: 150px; margin-bottom: 18px; }
   .topbar .tb-right { display: none; }
   .topbar .wrap { justify-content: center; text-align: center; }
   .topbar { font-size: .8rem; }
