@@ -182,19 +182,9 @@
       for (var i = 0; i < n; i++) {
         var p = document.createElement('span');
         p.className = 'petal';
-        p.innerHTML = '<svg viewBox="0 0 16 28" width="100%" height="100%" aria-hidden="true">' +
-          '<line x1="8" y1="13" x2="8" y2="26" stroke="#8a9a6b" stroke-width="1.3" stroke-linecap="round"/>' +
-          '<circle cx="8" cy="4" r="1.9" fill="#a870d6"/>' +
-          '<circle cx="5.8" cy="6.8" r="1.7" fill="#9b5ecf"/>' +
-          '<circle cx="10.2" cy="6.8" r="1.7" fill="#9b5ecf"/>' +
-          '<circle cx="8" cy="9.6" r="1.7" fill="#a870d6"/>' +
-          '<circle cx="6.2" cy="12" r="1.4" fill="#b085d8"/>' +
-          '<circle cx="9.8" cy="12" r="1.4" fill="#b085d8"/>' +
-          '</svg>';
+        p.textContent = '🪻';
         p.style.left = (Math.random() * 100) + '%';
-        var sz = (13 + Math.random() * 12);
-        p.style.width = sz + 'px';
-        p.style.height = (sz * 1.75) + 'px';
+        p.style.fontSize = (10 + Math.random() * 12) + 'px';
         p.style.animationDuration = (14 + Math.random() * 16) + 's';
         p.style.animationDelay = (-Math.random() * 24) + 's';
         p.style.setProperty('--dx', ((Math.random() - 0.5) * 200).toFixed(0) + 'px');
